@@ -21,7 +21,7 @@ class Table(models.Model):
     )
 
     class Meta:
-        verbose_name = 'стол заказов',
+        verbose_name = 'стол заказов'
         verbose_name_plural = 'Столы заказов'
         ordering = ('number',)
 
@@ -39,7 +39,8 @@ class BaseCategoryDishModel(models.Model):
         verbose_name='Идентификатор',
         help_text=('Может содержать символы латиницы, '
                    'цифры, дефис, подчёркивание.'),
-        unique=True
+        unique=True,
+        blank=True
     )
 
     class Meta:
@@ -49,9 +50,19 @@ class BaseCategoryDishModel(models.Model):
     def __str__(self):
         return self.title
 
+    def generate_unique_slug(self):
+        initial_slug = slugify(self.title)
+        unique_slug = initial_slug
+        n = 1
+        while True:
+            if not self.__class__.objects.filter(slug=unique_slug).exists():
+                return unique_slug
+            unique_slug = f'{initial_slug}-{n}'
+            n += 1
+
     def save(self, *args, **kwargs):
         if not self.pk and not self.slug:
-            self.slug = slugify(self.title)
+            self.slug = self.generate_unique_slug()
         return super().save(*args, **kwargs)
 
 
@@ -109,8 +120,7 @@ class Order(models.Model):
         verbose_name = 'заказ'
         verbose_name_plural = 'Заказы'
         ordering = (
-            'status',
-            'table_number'
+            '-created_at',
         )
         default_related_name = 'orders'
 
@@ -142,5 +152,3 @@ class DishOrder(models.Model):
 
     def __str__(self):
         return self.dish.title
-
-
