@@ -114,6 +114,9 @@ class Order(models.Model):
         )
         default_related_name = 'orders'
 
+    def __str__(self):
+        return f'Заказ {self.id}'
+
 
 class DishOrder(models.Model):
     order = models.ForeignKey(
