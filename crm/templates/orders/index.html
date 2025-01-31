@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Вкусная Гавань</title>
+</head>
+<body>
+{% for order in order_list %}
+  {{ order.id }}
+  {{ order.status }}
+{% endfor %}
+</body>
+</html>
