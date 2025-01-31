@@ -1,13 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Вкусная Гавань</title>
-</head>
-<body>
-{% for order in order_list %}
-  {{ order.id }}
-  {{ order.status }}
-{% endfor %}
-</body>
-</html>
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+{% block title %}
+  Вкусная Гавань
+{% endblock %}
+{% block content %}
+  {% for order in order_list %}
+    <article class="mb-5">
+      {{ order.id }}
+      {{ order.status }}
+    </article>
+  {% endfor %}
+{% endblock %}
+
+
+
