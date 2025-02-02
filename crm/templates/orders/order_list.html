@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+{% block title %}
+  Заказы
+{% endblock title %}
+{% block content %}
+  <div class="row row-cols-auto p-2">
+    {% for order in order_list %}
+      <div class="col">
+        <div class="card border-dark h-100" style="width: 18rem;">
+          <div class="card-header d-flex justify-content-between">
+            {{ order.created_at|date:"d N H:i" }}
+            <a href="#" class="btn btn-outline-dark btn-sm">
+              Изменить
+            </a>
+          </div>
+          <div class="card-body">
+            <div class="d-flex justify-content-between">
+              <h5 class="card-title">Заказ {{ order.id }}</h5>
+              <h6 class="card-title">{{ order.table_number }}</h6>
+            </div>
+            {% if order.status == 'accepted' %}
+              <h6 class="card-subtitle text-warning">Принят</h6>
+            {% elif order.status == 'ready' %}
+              <h6 class="card-subtitle text-primary">Готов</h6>
+            {% elif order.status == 'paid' %}
+              <h6 class="card-subtitle text-success">Оплачен</h6>
+            {% else %}
+              <h6 class="card-subtitle text-secondary">На уточнении</h6>
+            {% endif %}
+            <br>
+            {% for obj in order.order_dishes.all %}
+              <span class="card-text">{{ obj.dish.title }} x {{ obj.amount }}</span><br>
+            {% endfor %}
+            <br>
+            <p>
+            {% if order.status == 'paid' %} Оплачено: {% else %} К оплате: {% endif %} {{ order.total_price }} р.
+            </p>
+          </div>
+          <div class="card-footer d-flex justify-content-evenly">
+            <a href="#" class="btn btn-primary btn-sm">Готов</a>
+            <a href="#" class="btn btn-success btn-sm">Оплачен</a>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% endblock content %}
