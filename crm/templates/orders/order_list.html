@@ -10,8 +10,11 @@
         <div class="card border-dark h-100" style="width: 18rem;">
           <div class="card-header d-flex justify-content-between">
             {{ order.created_at|date:"d N H:i" }}
-            <a href="#" class="btn btn-outline-dark btn-sm">
+            <a href="{% url 'orders:edit' order.id %}" class="btn btn-outline-dark btn-sm">
               Изменить
+            </a>
+            <a href="{% url 'orders:delete' order.id %}" class="btn btn-outline-danger btn-sm">
+              Удалить
             </a>
           </div>
           <div class="card-body">
@@ -32,14 +35,9 @@
             {% for obj in order.order_dishes.all %}
               <span class="card-text">{{ obj.dish.title }} x {{ obj.amount }}</span><br>
             {% endfor %}
-            <br>
-            <p>
-            {% if order.status == 'paid' %} Оплачено: {% else %} К оплате: {% endif %} {{ order.total_price }} р.
-            </p>
           </div>
-          <div class="card-footer d-flex justify-content-evenly">
-            <a href="#" class="btn btn-primary btn-sm">Готов</a>
-            <a href="#" class="btn btn-success btn-sm">Оплачен</a>
+          <div class="card-footer">
+            {% if order.status == 'paid' %} Оплачено: {% else %} К оплате: {% endif %} {{ order.total_price }} р.
           </div>
         </div>
       </div>
