@@ -1,16 +1,47 @@
 {% extends "base.html" %}
+{% load static %}
 {% load django_bootstrap5 %}
 {% block title %}
   Вкусная Гавань
-{% endblock %}
+{% endblock title%}
 {% block content %}
-  {% for order in order_list %}
-    <article class="mb-5">
-      {{ order.id }}
-      {{ order.status }}
-    </article>
-  {% endfor %}
-{% endblock %}
-
-
-
+  <div class="container">
+    <div class="container mt-3 text-center">
+      <h2>Ресторанчик <b>Вкусная Гавань</b></h2>
+      <div id="carousel" class="carousel carousel-dark slide pt-5">
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <img src="{% static 'img/inside.png' %}" align="center" alt="" >
+          </div>
+          <div class="carousel-item">
+            <img src="{% static 'img/fasad.png' %}" align="center" alt="">
+          </div>
+        </div>
+        <a class="carousel-control-prev" role="button" href="#carousel" data-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </a>
+        <a class="carousel-control-next" role="button" href="#carousel" data-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </a>
+      </div>
+    </div>
+    <div class="row mt-5">
+      <div class="col-6 text-center">
+        <h4>Контакты</h4>
+        <p><i>г. Красноярск, ул. Никитина 18</i></p>
+        <p><i>тел. +7(999)999-99-99</i></p>
+        <p><i>E-mail: vselipoeli@example.com</i></p>
+      </div>
+      <div class="col-6 text-center">
+        <h4>Юридическая информация</h4>
+        <p><i>ИНН/КПП: 2465358995/246501001</i></p>
+        <p><i>ОГРН: 1242400000260</i></p>
+        <p><i>Юридический адрес: 660022, Красноярский край, г. Красноярск,<br>
+          ул. Никитина, д. 18, помещ. 3 </i>
+        </p>
+      </div>
+    </div>
+  </div>
+{% endblock content%}
