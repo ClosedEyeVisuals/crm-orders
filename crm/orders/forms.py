@@ -1,7 +1,7 @@
 from django import forms
 
 
-from orders.models import Dish, Order
+from orders.models import DishOrder, Order
 
 
 class OrderForm(forms.ModelForm):
@@ -11,6 +11,19 @@ class OrderForm(forms.ModelForm):
         fields = (
             'id',
             'table_number',
-            'items',
+            # 'items',
             'status'
         )
+
+
+class DishForm(forms.ModelForm):
+    class Meta:
+        model = DishOrder
+        fields = (
+            'dish',
+            'amount'
+        )
+
+
+DishFormSet = forms.inlineformset_factory(Order, DishOrder,
+                                          form=DishForm, extra=1, can_delete=False)
