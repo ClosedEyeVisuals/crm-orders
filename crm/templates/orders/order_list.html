@@ -4,9 +4,9 @@
   Заказы
 {% endblock title %}
 {% block content %}
-  <div class="row row-cols-auto p-2">
+  <div class="row row-cols-auto p-1 m-1">
     {% for order in order_list %}
-      <div class="col">
+      <div class="col mb-3">
         <div class="card border-dark h-100" style="width: 18rem;">
           <div class="card-header d-flex justify-content-between">
             {{ order.created_at|date:"d N H:i" }}
