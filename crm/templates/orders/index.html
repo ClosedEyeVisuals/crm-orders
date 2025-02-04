@@ -5,29 +5,19 @@
   Вкусная Гавань
 {% endblock title%}
 {% block content %}
-  <div class="container">
-    <div class="container mt-3 text-center">
-      <h2>Ресторанчик <b>Вкусная Гавань</b></h2>
-      <div id="carousel" class="carousel carousel-dark slide pt-5">
-        <div class="carousel-inner">
-          <div class="carousel-item active">
-            <img src="{% static 'img/inside.png' %}" align="center" alt="" >
-          </div>
-          <div class="carousel-item">
-            <img src="{% static 'img/fasad.png' %}" align="center" alt="">
-          </div>
-        </div>
-        <a class="carousel-control-prev" role="button" href="#carousel" data-slide="prev">
-          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Previous</span>
-        </a>
-        <a class="carousel-control-next" role="button" href="#carousel" data-slide="next">
-          <span class="carousel-control-next-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Next</span>
-        </a>
+  <div class="container-fluid">
+    <div class="container pt-4 text-center">
+      <h1>Ресторанчик</br> <i><b>Вкусная Гавань</b></i></h1>
+    </div>
+    <div class="row justify-content-between pt-5">
+      <div class="col-5">
+        <img src="{% static 'img/fasad.png' %}" height="680px" align="center" alt="" >
+      </div>
+      <div class="col-5">
+        <img src="{% static 'img/inside.png' %}" align="center" alt="" >
       </div>
     </div>
-    <div class="row mt-5">
+    <div class="row pt-5">
       <div class="col-6 text-center">
         <h4>Контакты</h4>
         <p><i>г. Красноярск, ул. Никитина 18</i></p>
