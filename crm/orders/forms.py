@@ -5,13 +5,11 @@ from orders.models import DishOrder, Order
 
 
 class OrderForm(forms.ModelForm):
-
     class Meta:
         model = Order
         fields = (
             'id',
             'table_number',
-            # 'items',
             'status'
         )
 
@@ -25,5 +23,10 @@ class DishForm(forms.ModelForm):
         )
 
 
-DishFormSet = forms.inlineformset_factory(Order, DishOrder,
-                                          form=DishForm, extra=1, can_delete=False)
+DishFormSet = forms.inlineformset_factory(
+    Order,
+    DishOrder,
+    form=DishForm,
+    extra=1,
+    can_delete=False
+)

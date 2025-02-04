@@ -25,9 +25,9 @@
                 Меню
               </a>
               <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
-              <li><a class="dropdown-item" href="#">Action</a></li>
-              <li><a class="dropdown-item" href="#">Another action</a></li>
-              <li><a class="dropdown-item" href="#">Something else here</a></li>
+                {% for category in categories %}
+                  <li><a class="dropdown-item" href="{% url 'orders:category-detail' category.slug %}">{{ category.title }}</a></li>
+                {% endfor %}
               </ul>
             </li>
           </ul>
