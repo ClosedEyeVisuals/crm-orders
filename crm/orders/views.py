@@ -28,79 +28,46 @@ class OrderListView(ListView):
         ).select_related('table_number').order_by('-created_at')
 
 
-class OrderDeleteView(OrderEditMixin, DeleteView):
-    template_name = 'orders/order_form.html'
+class OrderCreateView(CreateView):
+    model = Order
+    form_class = OrderForm
+    success_url = reverse_lazy('orders:list')
+    self.object = None
+
+    def get_context_data(self, **kwargs):
+        context = super(OrderCreateView, self).get_context_data(**kwargs)
+        context['dish_formset'] = DishFormSet(self.request.POST or None)
+        return context
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        dish_formset = context['dish_formset']
+        with transaction.atomic():
+            if form.is_valid() and dish_formset.is_valid():
+                self.object = form.save()
+                dish_formset.instance = self.object
+                dish_formset.save()
+        return super(CreateView, self).form_valid(form)
 
 
 class OrderUpdateView(OrderEditMixin, UpdateView):
     form_class = OrderForm
-    template_name = 'orders/order_form.html'
 
     def get_context_data(self, **kwargs):
         context = super(OrderUpdateView, self).get_context_data(**kwargs)
-        if self.request.POST:
-            context['dish_formset'] = DishFormSet(self.request.POST,
-                                                  instance=self.object)
-        else:
-            context['dish_formset'] = DishFormSet(instance=self.object)
-
+        context['dish_formset'] = DishFormSet(self.request.POST or None,
+                                              instance=self.object)
         return context
 
-
-class OrderCreateView(CreateView):
-    model = Order
-    form_class = OrderForm
-    template_name = 'orders/order_form.html'
-    success_url = reverse_lazy('orders:list')
-
-    def get(self, request, *args, **kwargs):
-        self.object = None
-        form_class = self.get_form_class()
-        form = self.get_form(form_class)
-        dish_form = DishFormSet()
-        return self.render_to_response(
-            self.get_context_data(order_form=form,
-                                  dish_formset=dish_form))
-
-    def post(self, request, *args, **kwargs):
-        self.object = None
-        form_class = self.get_form_class()
-        form = self.get_form(form_class)
-        dish_form = DishFormSet(self.request.POST)
-        if form.is_valid() and dish_form.is_valid():
-            return self.form_valid(form, dish_form)
-        else:
-            return self.form_invalid(form, dish_form)
-
-    def form_valid(self, form, dish_form):
-        self.object = form.save()
-        dish_form.instance = self.object
-        dish_form.save()
-        return HttpResponseRedirect(self.get_success_url())
-
-    def from_invalid(self, form, dish_form):
-        return self.render_to_response(
-            self.get_context_data(order_form=form,
-                                  dish_formset=dish_form))
+    def form_valid(self, form):
+        context = self.get_context_data()
+        dish_formset = context['dish_formset']
+        with transaction.atomic():
+            if form.is_valid() and dish_formset.is_valid():
+                form.save()
+                dish_formset.save()
+        return super(OrderUpdateView, self).form_valid(form)
 
 
-# def create_order(request):
-#     if request.method == 'POST':
-#         order_form = OrderForm(request.POST)
-#         dish_formset = DishFormSet(request.POST, prefix='Блюда')
-#
-#         if order_form.is_valid() and dish_formset.is_valid():
-#             order = order_form.save()
-#             dishes = dish_formset.save(commit=False)
-#             for dish in dishes:
-#                 dish.order = order
-#                 dish.save()
-#             return redirect('orders:list')
-#     else:
-#         order_form = OrderForm()
-#         dish_formset = DishFormSet(prefix='Блюда')
-#
-#     return render(request, 'orders/order_form.html', {
-#         'order_form': order_form,
-#         'dish_formset': dish_formset
-#     })
+class OrderDeleteView(OrderEditMixin, DeleteView):
+    pass
