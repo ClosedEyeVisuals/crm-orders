@@ -1,21 +1,37 @@
 {% load static %}
 {% load django_bootstrap5 %}
 <header>
-  <nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
       <a class="navbar-brand" href="{% url 'orders:index' %}">
       <img src=" {% static 'img/logo.png' %}" alt="" width="30" height="30" class="d-inline-block align-text-top">
       Вкусная Гавань
       </a>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="{% url 'orders:list' %}">Заказы</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Link</a>
-          </li>
-        </ul>
+        {% with request.resolver_match.view_name as view_name %}
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link {% if view_name == 'orders:create' %} active {% endif %}" href="{% url 'orders:create' %}">
+                Создать заказ
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {% if view_name == 'orders:list' %} active {% endif %}" aria-current="page" href="{% url 'orders:list' %}">
+                Заказы
+              </a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle {% if view_name == 'something' %} active {% endif %}" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Меню
+              </a>
+              <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+              <li><a class="dropdown-item" href="#">Action</a></li>
+              <li><a class="dropdown-item" href="#">Another action</a></li>
+              <li><a class="dropdown-item" href="#">Something else here</a></li>
+              </ul>
+            </li>
+          </ul>
+        {% endwith %}
       </div>
     </div>
   </nav>
