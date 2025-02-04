@@ -1,12 +1,12 @@
 from django.db import transaction
 from django.db.models import F, Sum
-from django.views.generic import (CreateView, DeleteView, ListView,
+from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
                                   TemplateView, UpdateView)
 
 
 from orders.forms import DishFormSet, OrderForm
 from orders.mixins import OrderMixin
-from orders.models import Order
+from orders.models import Category, Order
 
 
 class HomePage(TemplateView):
@@ -66,3 +66,8 @@ class OrderUpdateView(OrderMixin, UpdateView):
 
 class OrderDeleteView(OrderMixin, DeleteView):
     pk_url_kwarg = 'order_id'
+
+
+class CategoryDetailView(DetailView):
+    model = Category
+    slug_url_kwarg = 'category_slug'

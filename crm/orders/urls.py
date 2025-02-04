@@ -19,4 +19,9 @@ urlpatterns = [
         views.OrderDeleteView.as_view(),
         name='delete'
     ),
+    path(
+        'menu/<slug:category_slug>/',
+        views.CategoryDetailView.as_view(),
+        name='category-detail'
+    )
 ]
