@@ -1,14 +1,11 @@
 from django.db import transaction
-from django.db.models import F, Sum, Q
-from django.http import HttpResponseRedirect
-from django.shortcuts import redirect, render
-from django.urls import reverse_lazy
-from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
+from django.db.models import F, Sum
+from django.views.generic import (CreateView, DeleteView, ListView,
                                   TemplateView, UpdateView)
 
 
 from orders.forms import DishFormSet, OrderForm
-from orders.mixins import OrderEditMixin
+from orders.mixins import OrderMixin
 from orders.models import Order
 
 
@@ -28,11 +25,8 @@ class OrderListView(ListView):
         ).select_related('table_number').order_by('-created_at')
 
 
-class OrderCreateView(CreateView):
-    model = Order
+class OrderCreateView(OrderMixin, CreateView):
     form_class = OrderForm
-    success_url = reverse_lazy('orders:list')
-    self.object = None
 
     def get_context_data(self, **kwargs):
         context = super(OrderCreateView, self).get_context_data(**kwargs)
@@ -50,8 +44,9 @@ class OrderCreateView(CreateView):
         return super(CreateView, self).form_valid(form)
 
 
-class OrderUpdateView(OrderEditMixin, UpdateView):
+class OrderUpdateView(OrderMixin, UpdateView):
     form_class = OrderForm
+    pk_url_kwarg = 'order_id'
 
     def get_context_data(self, **kwargs):
         context = super(OrderUpdateView, self).get_context_data(**kwargs)
@@ -69,5 +64,5 @@ class OrderUpdateView(OrderEditMixin, UpdateView):
         return super(OrderUpdateView, self).form_valid(form)
 
 
-class OrderDeleteView(OrderEditMixin, DeleteView):
-    pass
+class OrderDeleteView(OrderMixin, DeleteView):
+    pk_url_kwarg = 'order_id'
