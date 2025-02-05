@@ -90,7 +90,7 @@ class Dish(BaseCategoryDishModel):
 
 class Order(models.Model):
     class OrderStatus(models.TextChoices):
-        ACCEPTED = 'accepted', 'в ожидании'
+        ACCEPTED = 'accepted', 'принят'
         READY = 'ready', 'готово'
         PAID = 'paid', 'оплачено'
 
