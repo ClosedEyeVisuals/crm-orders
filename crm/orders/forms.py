@@ -4,6 +4,11 @@ from django import forms
 from orders.models import DishOrder, Order
 
 
+class StatusForm(forms.Form):
+    status = forms.ChoiceField(label='Статус',
+                               choices=Order.OrderStatus.choices)
+
+
 class OrderForm(forms.ModelForm):
     class Meta:
         model = Order
