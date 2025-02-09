@@ -1,9 +1,12 @@
 from django.db import transaction
 from django.db.models import F, Sum
-from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
+from django.views.generic import (CreateView, DeleteView, DetailView,
                                   TemplateView, UpdateView)
 
+from django_filters.views import FilterView
 
+
+from orders.filters import OrderFilter
 from orders.forms import DishFormSet, OrderForm, StatusForm
 from orders.mixins import OrderMixin
 from orders.models import Category, Order
@@ -13,25 +16,18 @@ class HomePage(TemplateView):
     template_name = 'orders/index.html'
 
 
-class OrderListView(ListView):
+class OrderListView(FilterView):
     model = Order
+    template_name = 'orders/order_list.html'
+    filterset_class = OrderFilter
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        status = self.request.GET.get('status')
-        if status in self.model.OrderStatus:
-            queryset = queryset.filter(status=status)
-
         return queryset.annotate(
             total_price=Sum(
                 F('order_dishes__dish__price') * F('order_dishes__amount')
             )
         ).select_related('table_number').order_by('-created_at')
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super(OrderListView, self).get_context_data(**kwargs)
-        context['form'] = StatusForm()
-        return context
 
 
 class OrderCreateView(OrderMixin, CreateView):
