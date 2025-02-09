@@ -6,8 +6,8 @@ from django.views.generic import (CreateView, DeleteView, DetailView,
 from django_filters.views import FilterView
 
 
-from orders.filters import OrderFilter
-from orders.forms import DishFormSet, OrderForm, StatusForm
+from orders.filters import OrderDateRangeFilter, OrderFilter
+from orders.forms import DishFormSet, OrderForm
 from orders.mixins import OrderMixin
 from orders.models import Category, Order
 
@@ -28,6 +28,24 @@ class OrderListView(FilterView):
                 F('order_dishes__dish__price') * F('order_dishes__amount')
             )
         ).select_related('table_number').order_by('-created_at')
+
+
+class OrderPaidListView(OrderListView):
+    filterset_class = OrderDateRangeFilter
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.filter(status='paid')
+
+    @staticmethod
+    def get_total(queryset):
+        return queryset.aggregate(Sum('total_price'))
+
+    def get_context_data(self, **kwagrs):
+        context = super(OrderPaidListView, self).get_context_data(**kwagrs)
+        object_list = context['object_list']
+        context['total'] = self.get_total(object_list)
+        return context
 
 
 class OrderCreateView(OrderMixin, CreateView):
