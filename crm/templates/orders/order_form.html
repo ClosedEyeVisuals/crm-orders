@@ -11,8 +11,8 @@
   {% endif %}
 {% endblock title %}
 {% block content %}
-  <div class="col d-flex justify-content-center">
-    <div class="card col-3 m-2">
+  <div class="container d-flex justify-content-center">
+    <div class="card col-4 m-2">
       <div class="card-header">
         {% if 'edit' in request.path %}
           Редактирование заказа
@@ -27,7 +27,6 @@
           {% csrf_token %}
           {% if not 'delete' in request.path %}
             {% bootstrap_form form %}
-            <fieldset>
             {{ dish_formset.management_form }}
             {{ dish_formset.non_form_errors }}
             {% for form in dish_formset %}
@@ -35,7 +34,6 @@
                 {% bootstrap_form form %}
               </div>
             {% endfor %}
-            </fieldset>
           {% else %}
             <article>
               <p>Удалить заказ {{ order.id }} от {{ order.created_at }}?</p>
